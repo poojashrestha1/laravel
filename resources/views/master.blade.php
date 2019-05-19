@@ -1,47 +1,21 @@
-<!--<html>
-    <head>
-        <title>App Name - @yield('title')</title>
-        <link href="css/app.css" rel="stylesheet" type="text/css"/>
-
-        <link href="css/mystyle.css" rel="stylesheet" type="text/css"/>
-        
-
-        <script src="myscript.js"></script>
-    </head>
-    <body>
-        @yield('sidebar')
-            This is the master sidebar.
-        
-
-        <div class="container">
-            @yield('content')
-        </div>
-    </body>
-</html>-->
-
 <html>
     <head>
-        <title>App Name - @yield('title')</title>
+        <title>@yield('title')</title>
         <link href="css/app.css" rel="stylesheet" type="text/css"/>
-
-        <link href="css/mystyle.css" rel="stylesheet" type="text/css"/>
-        
-
-        <script src="myscript.js"></script>
+        <link href="mystyle.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="css/fontawesome.css">
+	<link rel="stylesheet" type="text/css" href="css/brands.css">
+	<link rel="stylesheet" type="text/css" href="css/solid.css">
+	<link rel="stylesheet" type="text/css" href="css/regular.css">
     </head>
     <body>
-
-    @yield('sidebar')
-        
-        
+       
 
         <div class="container">
             @yield('content')
         </div>
-
-
-    <div class="footer">
-    @yield('footer')
-    </div>
+        
     </body>
+    
 </html>

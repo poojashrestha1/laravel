@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 
-
 @section('content')
 <style>
   .uper {
@@ -14,9 +13,12 @@
     </div><br />
   @endif
   <table class="table table-striped">
-    <thead>  
+    <thead>
     <tr>
-    <td colspan=6><a href="{{ route('cats.create')}}"><button>Add Category</button></td>
+    <td colspan=8>
+    <a href="{{ route('cats.create')}}" class="btn btn-danger">
+    Add Category
+    </td>
     </tr>
         <tr>
           <td>ID</td>
@@ -27,7 +29,6 @@
         </tr>
     </thead>
     <tbody>
-  
         @foreach($cats as $item)
         <tr>
             <td>{{$item->id}}</td>

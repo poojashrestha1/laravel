@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    Dashboard layout will be here.
+                    Dashboard Layout will be
                 </div>
             </div>
         </div>

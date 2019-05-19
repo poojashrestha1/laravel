@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Post;
 use Illuminate\Http\Request;
+use App\Category;
+use App\Post;
+use Illuminate\Http\Response;
 
 class PostController extends Controller
 {
@@ -12,9 +13,13 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     // checks for login before going to cats
+    public function __construct(){
+        $this->middleware('auth');
+    }
     public function index()
     {
-        $posts=Post::all();
+        $posts = post::all(); 
         return view('back.posts.index', compact('posts'));
     }
 
@@ -25,7 +30,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('back.posts.create');
+        $cats=category::all();
+       // dd($cats);
+        return view('back.posts.create', compact('cats'));
     }
 
     /**
@@ -37,32 +44,40 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'=>"required",
-            'keyword'=>"required",
-            'description'=>"required",
-            'heading'=>"required",
-            'shortstory'=>"required",
-            'fullstory'=>"required",
-            'feature_image'=>"required",
-            'category_id'=>"required",
-            'user_id'=>"required",
-            'status'=>"required"
-          ]);
-       $cats= new Category([
+            'title'=>'required|string|min:5',
+            'heading'=>'required|string|min:5',
+            'keyword'=>'required|string|min:5',
+            'shortstory'=>'required|string|min:5',
+            'status' => 'required|boolean',
+            'files' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        if ($request->hasFile('files'))
+        {
+          $extension = $request->file('files')->getClientOriginalExtension();
+          $fileNameToStore = time() . '.' .$extension;
+          //upload image
+          $file = $request->file('files');
+          $destinationPath = public_path('/uploads');
+          $file->move($destinationPath, $fileNameToStore);
+        }
+        else{
+            return redirect()->back()->withInput($request->input())->with('error', 'file not selected');
+        }
 
-        'title'=>$request->get('title'),
-        'keyword'=>$request->get('keword'),
-        'description'=>$request->get('description'),
-        'heading'=>$request->get('heading'),
-        'shortstory'=>$request->get('shortstory'),
-        'fullstory'=>$request->get('fullstory'),
-        'feature_image'=>$request->get('feature_image'),
-        'category_id'=>$request->get('category_id'),
-        'user_id'=>$request->get('user_id'),
-        'status'=>$request->get('status')
-      ]);
-      $cats->save();
-      return redirect('/cats')->with('success', 'Category Added Successfully.');
+
+        $posts = new Post([
+            'title' => $request->get('title'),
+            'keyword'=>$request->get('keyword'),
+            'description'=> $request->get('description'),
+            'heading'=>$request->get('heading'),
+            'shortstory'=>$request->get('shortstory'),
+            'fullstory'=>$request->get('fullstory'),
+            'category_id'=>$request->get('category_id'),
+            'status'=> $request->get('status'),
+            'fimage'=>$fileNameToStore
+        ]);
+        $posts->save();
+        return redirect('/posts')->with('success', 'Post added successfully');
     }
 
     /**
@@ -84,7 +99,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $posts = Post::find($id); 
+        return view('back.posts.edit', compact('posts'));
     }
 
     /**
@@ -96,7 +112,20 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $posts = post::find($id);
+        $posts->title = $request->get('title');
+        $posts->keyword = $request->get('keyword');
+        $posts->description =  $request->get('description');
+        $posts->heading = $request->get('heading');
+        $posts->shortstory =$request->get('shortstory') ;
+        $posts->fullstory =$request->get('fullstory') ;
+        $posts->fimage =$request->get('fimage');
+        $posts->category_id =$request->get('category_id') ;
+        
+        $posts->status = $request->get('status');
+        $posts->save();
+
+        return redirect('/posts')->with('success', 'Post has been updated');
     }
 
     /**
@@ -107,6 +136,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $posts = post::find($id);
+        $posts->delete();
+   
+        return redirect('/posts')->with('success', 'Post has been deleted Successfully');
     }
 }

@@ -71,21 +71,22 @@
                 </div>
             </div>
         </nav>
+
         <main class="py-4">
-        <div class="row">
-        <div class="col-xl-12>">
+           <div class="row">
+           <div class="col-xl-12>">
             <ul>
                 <li>Users</li>
                 <li><a href="/cats">Category</a></li>
-                <li>Post</li>
+                <li><a href="/posts">Post</a></li>
                 <li>Gallery</li>
                 <li>Comments</li>
             </ul>
-        </div>
-        <div class="col-xl-9>">
-        @yield('content')
-        </div>
-        </div>
+           </div>
+           <div class="col-xl-9">
+           @yield('content')
+           </div>
+           </div>
         </main>
     </div>
 </body>

@@ -1,4 +1,4 @@
-@extends('back.layout')
+@extends('layouts.admin')
 
 @section('content')
 <style>
@@ -8,7 +8,7 @@
 </style>
 <div class="card uper">
   <div class="card-header">
-    <a href="{{ route('cats.index')}}">Display All categories</a>
+    Add Category
   </div>
   <div class="card-body">
     @if ($errors->any())
@@ -20,22 +20,22 @@
         </ul>
       </div><br />
     @endif
-      <form method="post" action="{{ route('cats.store') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('cats.store') }}" enctype="multipart/form-data">
           <div class="form-group">
               @csrf
-              <label for="name">Name:</label>
+              <label for="name">Category Name:</label>
               <input type="text" class="form-control" name="name"/>
           </div>
           <div class="form-group">
-              <label for="desciption">Description :</label>
+              <label for="description">Category Description :</label>
               <input type="text" class="form-control" name="description"/>
           </div>
           <div class="form-group">
-              <label for="desciption">Image :</label>
+              <label for="image">Category Image :</label>
               <input type="file" class="form-control" name="files"/>
           </div>
           <div class="form-group">
-              <label for="status">status:</label>
+              <label for="status">Category Status:</label>
               <input type="text" class="form-control" name="status"/>
           </div>
           <button type="submit" class="btn btn-primary">Add</button>

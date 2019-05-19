@@ -13,15 +13,14 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function __construct()
     {
         $this->middleware('auth');
-    }
-
-
+    } 
     public function index()
     {
-        $cats=Category::all();
+        $cats=category::all();
         return view('back.categorys.index', compact('cats'));
     }
 
@@ -45,40 +44,33 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name'=>'required|alpha|min:5',
-            'description'=> 'required|string',
-            'files'=>'required|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
-            'status' => 'required|boolean'
+            'status' => 'required|boolean',
+            'files' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
           ]);
+           //Handle file upload
+        if ($request->hasFile('files')) {
+            // Get jst ext
+            $extension = $request->file('files')->getClientOriginalExtension();
+            //Filename to store
+            $fileNameToStore = time() . '.' . $extension;
+            //uplod image
+            $file = $request->file('files');
+            $destinationPath = public_path('/uploads');
+            $file->move($destinationPath, $fileNameToStore);
+        } else {
+            return redirect()->back()->withInput($request->input())->with('error', 'File Not Selected');
+        }
+        $cats= new Category([
+            'name'=>$request->get('name'), //right side is table data name and left side is form name
+            'description'=>$request->get('description'),
+            'status'=>$request->get('status'),
+            'image'=>$fileNameToStore
+            
+        ]);
 
-          //Handle file upload
-          if($request->hasFile('files'))
-          {
-              //Get jst ext
-              $extension=$request->file('files')->getClientOriginalExtension();
-              //Filename to store
-              $fileNameToStore = time() . '.' . $extension;
-
-              //upload image
-              $file=$request->file('files');
-              $destinationPath= public_path('/uploads');
-              $file->move($destinationPath,$fileNameToStore);
-          }
-          else{
-              return redirect()->back()->withInput($request->input())->with('error','File not selected');
-          }
-         /* $image=$request->file('image');
-          $image_name=time().$image->getClientOriginalName();
-          $image_path='/uploads';
-          $image->move($image_path,$image_name);*/
-
-       $cats= new Category([
-        'name'=> $request->get('name'),
-        'description'=> $request->get('description'),
-        'image'=>$fileNameToStore,
-        'status'=> $request->get('status')
-      ]);
-      $cats->save();
-      return redirect('/cats')->with('success', 'Category Added Successfully.');
+       
+        $cats->save();
+      return redirect('/cats')->with('success', 'Category has been added');
     }
 
     /**
@@ -114,13 +106,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-      
+        $request->validate([
+            'name'=>'required',
+            'description'=> 'required',
+            'status' => 'required|integer'
+          ]);
     
           $cats = Category::find($id);
-          $cats->name= $request->get('name');
-          $cats->description= $request->get('description');
-          $cats->status= $request->get('status');
-         
+          $cats->name = $request->get('name');
+          $cats->description = $request->get('description');
+          $cats->status = $request->get('status');
           $cats->save();
     
           return redirect('/cats')->with('success', 'Category has been updated');
@@ -134,11 +129,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-    
-             $cats = Category::find($id);
-             $cats->delete();
-        
-             return redirect('/cats')->with('success', 'Category has been deleted Successfully');
-        
+    $cats = Category::find($id);
+    $cats->delete();
+
+     return redirect('/cats')->with('success', 'Category has been deleted Successfully');
     }
 }

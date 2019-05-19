@@ -20,11 +20,11 @@
         </ul>
       </div><br />
     @endif
-      <form method="post" action="{{  route('cats.update', $cats->id) }}">
+      <form method="post" action="{{ route('cats.update', $cats->id) }}">
         @method('PATCH')
         @csrf
         <div class="form-group">
-          <label for="name">Category Name:</label>
+          <label for="name">Name:</label>
           <input type="text" class="form-control" name="name" value={{ $cats->name }} />
         </div>
         <div class="form-group">
