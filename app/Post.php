@@ -14,7 +14,7 @@ class Post extends Model
         'shortstory',
         'fullstory',
         'category_id',
-        
+        'user_id',
         'fimage',
         'status'
     ];

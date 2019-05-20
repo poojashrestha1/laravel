@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Category;
 use App\Post;
 use Illuminate\Http\Response;
+use Auth;
 
 class PostController extends Controller
 {
@@ -19,7 +20,11 @@ class PostController extends Controller
     }
     public function index()
     {
-        $posts = post::all(); 
+        //$posts = post::all();
+        $posts = post::join('Categorys','categorys.id','=','posts.category_id')
+        ->select(['posts.id','posts.title','posts.heading','posts.status','categorys.name','posts.updated_at'])
+        ->orderBy('posts.updated_at','desc')
+        ->get();
         return view('back.posts.index', compact('posts'));
     }
 
@@ -30,7 +35,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $cats=category::all();
+        $posts=category::all();
        // dd($cats);
         return view('back.posts.create', compact('cats'));
     }
@@ -48,8 +53,9 @@ class PostController extends Controller
             'heading'=>'required|string|min:5',
             'keyword'=>'required|string|min:5',
             'shortstory'=>'required|string|min:5',
-            'status' => 'required|boolean',
-            'files' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'files' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => 'boolean',
+     
         ]);
         if ($request->hasFile('files'))
         {
@@ -73,6 +79,7 @@ class PostController extends Controller
             'shortstory'=>$request->get('shortstory'),
             'fullstory'=>$request->get('fullstory'),
             'category_id'=>$request->get('category_id'),
+            'user_id'=>Auth::user()->id,
             'status'=> $request->get('status'),
             'fimage'=>$fileNameToStore
         ]);

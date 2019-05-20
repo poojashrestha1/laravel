@@ -28,8 +28,8 @@
           <td>Short Story</td>
           <td>Full Story</td>
           <td>Image</td>
-          <td>Category</td>
-          <td>User</td> 
+          <td>Category ID</td>
+          <td>User ID</td> 
           <td>Status</td>
           <td colspan="2">Action</td>
         </tr>
@@ -39,13 +39,8 @@
         <tr>
             <td>{{$item->id}}</td>
             <td>{{$item->title}}</td>
-            <td>{{$item->keyword}}</td>
-            <td>{{$item->description}}</td>
             <td>{{$item->heading}}</td>
-            <td>{{$item->shortstory}}</td>
-            <td>{{$item->fullstory}}</td>
-            <td>{{$item->fimage}}</td>
-            <td>{{$item->category_id}}</td>
+            <td>{{$item->name}}</td>
             <td>{{$item->user_id}}</td>
             <td>{{$item->status}}</td>
             <td><a href="{{ route('posts.edit',$item->id)}}" class="btn btn-primary">Edit</a></td>

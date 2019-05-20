@@ -1,7 +1,5 @@
 @extends('layouts.admin')
-@section('title')
-  Add Post
-@endsection
+
 @section('content')
 <style>
   .uper {
@@ -10,7 +8,7 @@
 </style>
 <div class="card uper">
   <div class="card-header">
-  <a href="{{ route('posts.index')}}"> All Posts</a>
+    Add Category
   </div>
   <div class="card-body">
     @if ($errors->any())
@@ -20,50 +18,28 @@
               <li>{{ $error }}</li>
             @endforeach
         </ul>
-      </div><br/>
+      </div><br />
     @endif
-      <form method="post" action="{{ route('posts.store') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
           <div class="form-group">
               @csrf
-              <label for="name">Title:</label>
+              <label for="title">Title: </label>
               <input type="text" class="form-control" name="title"/>
           </div>
           <div class="form-group">
-              <label for="text">Keyword</label>
+              <label for="keyword">Keyword :</label>
               <input type="text" class="form-control" name="keyword"/>
           </div>
           <div class="form-group">
-              <label for="text">Description</label>
-              <input type="text" class="form-control" name="description"/>
+              <label for="fimage"> Image :</label>
+              <input type="file" class="form-control" name="fimage" />
           </div>
+
+
+         
+
           <div class="form-group">
-              <label for="text">Heading</label>
-              <input type="text" class="form-control" name="heading"/>
-          </div>
-          <div class="form-group">
-              <label for="text">Short Story</label>
-              <input type="text" class="form-control" name="shortstory"/>
-          </div>
-          <div class="form-group">
-              <label for="text">Full Story</label>
-              <input type="text" class="form-control" name="fullstory"/>
-          </div>
-          <div class="form-group">
-              <label for="image">Feature Image :</label>
-              <input type="file" class="form-control" name="files"/>
-          </div>
-          <div class="form-group">
-              <label for="text">Category</label>
-              <select name="category_id">
-              @foreach($cats as $item)
-              <option value= " {{ $item->id }} ">{{ $item->name }}  </option>
-              
-              @endforeach
-              </select>
-          </div>
-        
-          <div class="form-group">
-              <label for="quantity">Status</label>
+              <label for="status">Category Status:</label>
               <input type="text" class="form-control" name="status"/>
           </div>
           <button type="submit" class="btn btn-primary">Add</button>
